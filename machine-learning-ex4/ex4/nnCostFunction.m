@@ -64,16 +64,24 @@ h = sigmoid(Z3);
 log_h = log(h);
 log_h_neg = log(1-h);
 J = 0;
+delta3 = zeros(size(h));
 for k = 1:num_labels
   y_k = y == k;
-  J -= (y == k)'*log_h(:, k) + (y != k)'*log_h_neg(:, k);
+  J -= y_k'*log_h(:, k) + (y != k)'*log_h_neg(:, k);
+  delta3(:, k) = h(:, k) - y_k;
 endfor
 J /= m;
 t1_flat = Theta1(:, 2:end)(:);
 t2_flat = Theta2(:, 2:end)(:);
 J += lambda/2/m*(dot(t1_flat, t1_flat)+dot(t2_flat, t2_flat));
-Theta1_grad = zeros(size(Theta1));
-Theta2_grad = zeros(size(Theta2));
+
+delta2 = (delta3*Theta2(:, 2:end)).*sigmoidGradient(Z2);
+Theta2_grad = delta3' * A2;
+Theta1_grad = delta2' * A1;
+Theta2_grad(:, 2:end) += lambda*Theta2(:, 2:end);
+Theta1_grad(:, 2:end) += lambda*Theta1(:, 2:end);
+Theta2_grad /= m;
+Theta1_grad /= m;
 
 % -------------------------------------------------------------
 
