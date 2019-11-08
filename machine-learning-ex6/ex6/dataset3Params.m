@@ -19,20 +19,21 @@ function [C, sigma] = dataset3Params(X, y, Xval, yval)
 %        mean(double(predictions ~= yval))
 %
 
-C = 1; sigma = 0.3; error = 1;
-cand = [0.01 0.03 0.1 0.3 1 3 10 30];
-for c = cand
-  for s = cand
-    model = svmTrain(X, y, c, @(x1, x2) gaussianKernel(x1, x2, s));
-    predictions = svmPredict(model, Xval);
-    curError = mean(double(predictions ~= yval));
-    fprintf('C = %f, sigma = %f, error = %f\n', c, s, curError);
-    if curError < error
-      C = c; sigma = s; error = curError;
-    endif
-  endfor
-endfor
-fprintf('optimal: C = %f, sigma = %f, error = %f\n', C, sigma, error);
+C = 1; sigma = 0.1;
+% error = 1;
+% cand = [0.01 0.03 0.1 0.3 1 3 10 30];
+% for c = cand
+%   for s = cand
+%     model = svmTrain(X, y, c, @(x1, x2) gaussianKernel(x1, x2, s));
+%     predictions = svmPredict(model, Xval);
+%     curError = mean(double(predictions ~= yval));
+%     fprintf('C = %f, sigma = %f, error = %f\n', c, s, curError);
+%     if curError < error
+%       C = c; sigma = s; error = curError;
+%     endif
+%   endfor
+% endfor
+fprintf('optimal: C = %f, sigma = %f\n', C, sigma);
 
 % =========================================================================
 
